@@ -1,13 +1,14 @@
 <launch>
-  <rosparam command="load" file="$(find jackal_control)/config/control.yaml" />
+  <!-- <rosparam command="load" file="$(find jackal_control)/config/control.yaml" /> -->
 
-  <node name="controller_spawner" pkg="controller_manager" type="spawner"
-        args="jackal_joint_publisher jackal_velocity_controller" />
+  <!-- <node name="controller_spawner" pkg="controller_manager" type="spawner"
+        args="jackal_joint_publisher jackal_velocity_controller" /> -->
 
   <node pkg="robot_localization"  type="navsat_transform_node" name="navsat_transform_node" >
     <param name="frequency"                    value="50" />
     <param name="world_frame"                  value="utm" />
     <!-- <param name="publish_filtered_gps"         value="true"/> -->
+    <remap from="imu/data"                     to="imu/data_raw" />
     <remap from="gps/fix"                      to="navsat/fix" />
   </node>
 
@@ -21,9 +22,9 @@
     <remap from="odometry/filtered"         to="utm_filtered" />
   </node> -->
 
-  <node pkg="twist_mux" type="twist_mux" name="twist_mux">
+  <!-- <node pkg="twist_mux" type="twist_mux" name="twist_mux">
     <rosparam command="load" file="$(find jackal_control)/config/twist_mux.yaml" />
     <remap from="twist_mux_out" to="jackal_velocity_controller/cmd_vel"/>
-  </node>
+  </node> -->
 
 </launch>
