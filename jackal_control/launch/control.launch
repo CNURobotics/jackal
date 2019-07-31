@@ -4,12 +4,14 @@
   <!-- <node name="controller_spawner" pkg="controller_manager" type="spawner"
         args="jackal_joint_publisher jackal_velocity_controller" /> -->
 
-  <node pkg="robot_localization"  type="navsat_transform_node" name="navsat_transform_node" >
-    <param name="frequency"                    value="50" />
-    <param name="world_frame"                  value="utm" />
-    <!-- <param name="publish_filtered_gps"         value="true"/> -->
+  <node pkg="robot_localization"  type="navsat_transform_node" name="navsat_transform_node" output="screen" >
+    <param name="publish_filtered_gps"         value="true" />
+    <param name="broadcast_utm_transform"      value="true" />
+    <param name="broadcast_utm_transform_as_parent_frame" value="true" />
+    <rosparam param="datum">[37.064215, -76.493458, 2.26893, utm, base_link]</rosparam>
     <remap from="imu/data"                     to="imu/data_raw" />
     <remap from="gps/fix"                      to="navsat/fix" />
+    <remap from="odometry/filtered"            to="odom_filtered" />
   </node>
 
   <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization">
@@ -17,9 +19,13 @@
     <remap from="odometry/filtered"         to="odom_filtered" />
   </node>
 
-  <!-- <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization_gps">
+  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization_gps">
     <rosparam command="load" file="$(find jackal_control)/config/robot_localization_gps.yaml" />
     <remap from="odometry/filtered"         to="utm_filtered" />
+  </node>
+
+  <!-- <node pkg="simple_message_to_tf" type="message_to_tf" name="robot_odometry">
+    <param name="odometry_topic"          value="utm_filtered"/>
   </node> -->
 
   <!-- <node pkg="twist_mux" type="twist_mux" name="twist_mux">

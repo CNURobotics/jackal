@@ -1,5 +1,4 @@
 #Configuation for robot odometry EKF
-#
 frequency: 50
 
 odom0: /jackal_velocity_controller/odom
